@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.ModelMapper">
+    
+    <select id="selectModelInfoAll" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+    	SELECT 
+			v.MODEL_ID
+			,v.MODEL_VIEW_NAME
+			,TO_CHAR(v.FIRST_TRAIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS FIRST_TRAIN_DATE
+			,v.TRAIN_CNT
+			,v.TRAIN_DATA_PATH
+			,v.TRAIN_DATA_FILE
+			,v.MODEL_STATE
+			,d.MODEL_TYPES
+		FROM
+			MODEL_VIEW v
+		JOIN
+			MODEL_DETAIL d
+		ON
+			v.MODEL_ID = d.MODEL_ID
+		WHERE
+			1=1
+		AND 
+			d.MODEL_STATE = 'A'
+		ORDER BY
+			d.DATETIME DESC
+    </select>
+    
+    
+    <select id="selectFeatures" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+    	SELECT 
+		    FEATURES
+		FROM 
+		    MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID = #{modelId}
+		AND
+			MODEL_STATE = 'A'
+    </select>
+	
+	
+</mapper>
+
+

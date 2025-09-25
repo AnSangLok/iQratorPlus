@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.MoniterMapper">
+    
+    <select id="selectMonitoringAlgorithm" resultType="kr.co.iQratorPlus.monitering.domain.AlgorithmVO">
+		SELECT
+			ALGORITHM_TYPE,
+			COUNT(ALGORITHM_TYPE) AS CNT
+		FROM
+			MODEL_DETAIL
+		WHERE
+			MODEL_STATE = 'A'
+		GROUP BY
+			ALGORITHM_TYPE
+	</select>
+	
+	<select id="selectMonitoringCallApiCnt" resultType="kr.co.iQratorPlus.monitering.domain.CallApiCntVO">
+		SELECT
+			MODEL_VIEW_NAME,
+			CALL_API_CNT
+		FROM
+			MODEL_VIEW
+		WHERE
+			CALL_API_CNT > 0
+	</select>
+
+</mapper>

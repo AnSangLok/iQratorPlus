@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.LoginMapper">
+
+	<select id="selectAdminInfo" parameterType="kr.co.iQratorPlus.login.domain.LoginVO" resultType="kr.co.iQratorPlus.login.domain.LoginVO">
+		SELECT 
+			USER_NAME
+			,PASSWORD
+		FROM
+			IRS_ADMIN_USER
+		WHERE
+			USER_NAME = #{userName}
+	</select>
+
+</mapper>

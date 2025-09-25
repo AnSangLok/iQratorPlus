@@ -1,0 +1,102 @@
+@charset "utf-8";
+
+html body {margin: 0; padding: 0; font-family:'NanumGothic','Open Sans','arial';  height: 100%;}
+a { text-decoration: none;}
+p { margin: 0; padding: 0;}
+
+
+
+#login_Wrap { width:600px; height:500px; border-radius: 10px; background-color: #f3f2f2; color:#222; position:absolute; left:50%; top:50%; margin-top: -250px; margin-left: -300px;}
+
+    .login_title { width: 100%; height: 150px; line-height: 150px; background-color: #021e3d; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px;}
+    .login_title img {vertical-align:middle; display: inline; margin-top: -15px; }
+    .login_title p { font-size: 40px; color: #fff; font-weight: 600;  padding: 0 0 0 20px; margin: 0; display: inline; }
+
+    .id { text-align: center; padding-top: 60px;}
+    .id p { float: left; font-size: 20px; height: 40px; line-height: 40px; color: #666; margin: 0 40px 0 75px; }
+    .id input { float: left; width: 350px; height: 40px; line-height: 40px; border: 1px solid #d7d7d7;}
+
+    .pw { text-align: center; padding-top: 20px;}
+    .pw p { float: left; font-size: 20px; height: 40px; line-height: 40px; color: #666; margin: 0 21px 0 75px; }
+    .pw input { float: left; width: 350px; height: 40px; line-height: 40px; border: 1px solid #d7d7d7;}
+
+    .login_btn { text-align: center; padding-top: 50px;}
+    .login_btn input {width:450px; height:50px; line-height:50px; font-size: 20px; background-color:#021e3d; transition: all .3s; border:0; color:#fff; cursor:pointer; }
+    .login_btn input:hover { background-color:#2666b0; transition: all .3s; }
+
+
+
+
+
+#login_popup { width:500px; height:200px; border:1px solid #e1e1e1; background-color: #fff; color:#222; position:absolute; left:50%; top:50%; margin-top: -100px; margin-left: -250px;}
+
+#login_popup .title { width: 100%; height: 40px; line-height: 40px; background-color: #021e3d; }
+#login_popup .title p { color: #fff; font-weight: 600; padding: 0 0 0 20px; margin: 0;}
+#login_popup .title a { color: #fff; font-weight: 600; padding: 0 0 0 20px; margin: 0; text-decoration: none;}
+#login_popup .title .popup_close {padding: 0px; position: absolute; top: 0; right: 20px;}
+#login_popup .title .popup_close .button { width:40px; height:40px; line-height:40px; background-color:#4d5256; transition: all .3s; border:0; color:#fff; cursor:pointer; }
+
+#login_popup .text_box { width: 100%; height: 160px; background-color: #fff; position: relative; }
+#login_popup .text_box img { position: absolute; top: 30px; left: 40px;}
+#login_popup .text_box .p1 { padding: 30px 50px 0 120px; line-height: 150%; }
+#login_popup .text_box .p2 { padding: 10px 50px 0 120px; line-height: 150%; font-size: 13px; color: #ef2e15;}
+#login_popup .text_box .p3 { padding: 0px 50px 0 120px; line-height: 150%; font-size: 13px;}
+#login_popup .text_box button { width:60px; height:22px; line-height:22px; font-size: 12px; background-color:#021e3d; transition: all .3s; border:0; color:#fff; cursor:pointer; float: right; margin-right: 20px;}
+#login_popup .text_box button:hover { background-color:#2666b0; transition: all .3s; }
+
+
+
+#logout_popup { width:400px; height:160px; border:1px solid #e1e1e1; background-color: #fff; color:#222; position:absolute; left:50%; top:50%; margin-top: -80px; margin-left: -200px;}
+
+#logout_popup .title { width: 100%; height: 40px; line-height: 40px; background-color: #021e3d; }
+#logout_popup .title p { color: #fff; font-weight: 600; padding: 0 0 0 20px; margin: 0;}
+#logout_popup .title a { color: #fff; font-weight: 600; padding: 0 0 0 20px; margin: 0; text-decoration: none;}
+#logout_popup .title .popup_close {padding: 0px; position: absolute; top: 0; right: 20px;}
+#logout_popup .title .popup_close .button { width:40px; height:40px; line-height:40px; background-color:#4d5256; transition: all .3s; border:0; color:#fff; cursor:pointer; }
+
+#logout_popup .text_box { width: 100%; background-color: #fff; position: relative; }
+#logout_popup .text_box img { position: absolute; top: 30px; left: 40px;}
+#logout_popup .text_box .p1 { padding: 30px 50px 0 120px; line-height: 150%; }
+
+#logout_popup button { cursor: pointer;}
+#logout_popup .btn_box { float: left; margin:15px 0 0 120px;}
+#logout_popup .btn_box button { width:60px; height:22px; line-height:22px; font-size: 12px; background-color:#021e3d; transition: all .3s; border:0; color:#fff; cursor:pointer;}
+#logout_popup .btn_box button:hover { background-color:#2666b0; transition: all .3s; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .login_title .popup_close { text-align:center; padding: 0px; position: absolute; top: 0; right: 0;}
+    .login_title .popup_close .button { width:40px; height:40px; line-height:40px; background-color:#4d5256; transition: all .3s; border:0; color:#fff; cursor:pointer; }
+    .login_title .popup_close .button:hover { background-color:#0e4677; transition: all .3s;} 
+    .login_title .popup_close .button:focus { outline:none; } 
+
+    .popup_cont { padding: 20px;}
+    .popup_cont .cont_ti { font-size: 14px; font-weight: bold;  }
+    .popup_cont .search_btn { font-size: 12px; color: #fff; background-color: #276398; border: none; border-radius: 3px; padding: 3px 0; width: 50px; text-align: center; cursor: pointer; margin-left: 6px;}
+    .popup_cont .more_btn { font-size: 12px; color: #fff; background-color: #276398; border: none; border-radius: 3px; padding: 3px 0; width: 50px; text-align: center; cursor: pointer; margin: 0;}
+    .popup_cont input { width: 99%; margin-top: 5px; }
+    
+
+
+
+
+
+
+
+
+        
+       
+        

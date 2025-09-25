@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.ModelMapper">
+    
+    <select id="selectFirmCnt" parameterType="kr.co.iQratorPlus.model.domain.DemoVO" resultType="int">
+    	SELECT
+    		COUNT(*)
+    	FROM
+    		IRS_BAS100_FIRM_WSTE
+    	WHERE
+    		1=1
+    	AND
+    		 ENTN IN (
+	    					SELECT
+	    						ENTN 
+	    					FROM
+	    						IRS_PRC200_QUNT_IS
+    					)
+    	<if test="firmName != '%%'">
+    		AND
+    			FIRM_NAME LIKE #{firmName}
+    	</if>
+    	<if test="entn != null and entn != ''">
+    		AND
+    			ENTN = #{entn}
+    	</if>
+    </select>
+    
+    <select id="selectFirmList" parameterType="kr.co.iQratorPlus.model.domain.DemoVO" resultType="kr.co.iQratorPlus.model.domain.DemoVO">
+    	SELECT
+    		FIRM_NAME,
+    		ENTN,
+    		WSTE_NAME
+    	FROM
+    		IRS_BAS100_FIRM_WSTE
+    	WHERE
+    		1=1
+    	AND
+    		 ENTN IN (
+	    					SELECT
+	    						ENTN 
+	    					FROM
+	    						IRS_PRC200_QUNT_IS
+    					)
+    	<if test="firmName != '%%'">
+    		AND
+    			FIRM_NAME LIKE #{firmName}
+    	</if>
+    	<if test="entn != null and entn != ''">
+    		AND
+    			ENTN = #{entn}
+    	</if>
+	    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS
+	    FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+    
+    
+    <select id="selectEmisFirmCnt" parameterType="kr.co.iQratorPlus.model.domain.DemoVO" resultType="int">
+    	SELECT
+    		COUNT(*)
+    	FROM(
+	    	SELECT 
+	    		ENTN
+	    	FROM 
+	    		IRS_BAS100_FIRM_WSTE 
+	    	WHERE 
+	    		1=1
+	    	AND 
+	    		ENTN IN (
+		    					SELECT DISTINCT
+		    						TRTM_CHRG 
+		    					FROM
+		    						IRS_MAN200_DATE_RESULT
+	    					)
+	    	<if test="firmName != '%%'">
+	    		AND
+	    			FIRM_NAME LIKE #{firmName}
+	    	</if>
+	    	<if test="entn != null and entn != ''">
+	    		AND
+	    			ENTN = #{entn}
+	    	</if>
+	    	GROUP BY ENTN
+    	)
+    </select>
+    
+    
+    <select id="selectEmisFirm" parameterType="kr.co.iQratorPlus.model.domain.DemoVO" resultType="kr.co.iQratorPlus.model.domain.DemoVO">
+    	SELECT 
+    		ENTN,
+    		MAX(FIRM_NAME) AS FIRM_NAME,
+    		MAX(WSTE_NAME) AS WSTE_NAME
+    	FROM 
+    		IRS_BAS100_FIRM_WSTE 
+    	WHERE
+    		1=1
+    	AND 
+    		ENTN IN (
+	    					SELECT DISTINCT
+	    						TRTM_CHRG 
+	    					FROM
+	    						IRS_MAN200_DATE_RESULT
+    					)
+    	<if test="firmName != '%%'">
+    		AND
+    			FIRM_NAME LIKE #{firmName}
+    	</if>
+    	<if test="entn != null and entn != ''">
+    		AND
+    			ENTN = #{entn}
+    	</if>
+    	GROUP BY ENTN
+	    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS
+	    FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+	
+	
+</mapper>
+
+

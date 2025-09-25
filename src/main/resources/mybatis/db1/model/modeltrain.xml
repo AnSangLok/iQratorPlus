@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.ModelMapper">
+    
+    
+    <select id="reTrainList" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+    	SELECT 
+		    mv.MODEL_ID, 
+		    mv.MODEL_VIEW_NAME
+		FROM 
+		    MODEL_VIEW mv
+    </select>
+    <!-- 신규 모델 생성시 id체크 -->
+    <select id="latestModelId" resultType="java.lang.String">
+    	SELECT 
+    		MODEL_ID
+		FROM 
+			MODEL_VIEW
+		ORDER BY 
+			FIRST_TRAIN_DATE DESC
+		FETCH FIRST 1 ROW ONLY
+    </select>
+    
+    <select id="selectViewAndDetailList" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT 
+			v.TRAIN_DATA_FILE
+			,d.MODEL_ORG_NAME
+			,d.TARGET_VAL
+			,d.FEATURES
+			,d.MODEL_PATH
+			,d.OUTDATA_PATH
+			,d.OUTDATA_NAME
+			,d.VALID_RATIO
+			,d.ALGORITHM_TYPE
+			,d.AL_PARAM1
+			,d.AL_PARAM2
+			,d.AL_PARAM3
+			,d.SEASON
+		FROM
+			MODEL_VIEW v
+		JOIN
+			MODEL_DETAIL d
+		ON
+			v.MODEL_ID = d.MODEL_ID
+		WHERE
+			1=1
+		AND
+			v.MODEL_ID = #{modelId}
+		AND 
+			d.MODEL_STATE = 'A'
+	</select>
+	
+	<select id="selectExistDataPath" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT 
+			d.OUTDATA_PATH
+			,d.OUTDATA_NAME
+			,d.TARGET_VAL
+			,d.FEATURES
+		FROM
+			MODEL_DETAIL d
+		WHERE
+			1=1
+		AND
+			d.MODEL_ID = #{modelId}
+		AND
+			d.MODEL_STATE = 'A'
+	</select>
+	
+	<select id="checkModelIdDuplicate" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM MODEL_VIEW 
+	    WHERE MODEL_ID = #{modelId}
+	</select>
+	
+	<insert id="insertModelView" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		INSERT INTO MODEL_VIEW (
+		    MODEL_ID,
+		    MODEL_VIEW_NAME,
+		    FIRST_TRAIN_DATE,
+		    TRAIN_CNT,
+		    TRAIN_DATA_PATH,
+		    TRAIN_DATA_FILE,
+		    MODEL_STATE,
+		    CALL_API_CNT
+		) VALUES (
+		    #{modelId},
+		    #{modelViewName},
+		    TO_DATE(#{firstTrainDate}, 'yyyy-MM-dd HH24:MI:SS'),
+		    1,
+		    #{trainDataPath},
+		    #{trainDataFile},
+		    'R',
+		    0
+		)
+	</insert>
+	
+	
+	<insert id="insertModelDetails" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+	    INSERT INTO MODEL_DETAIL (
+	        MODEL_ID,
+	        MODEL_VIEW_NAME,
+	        MODEL_ORG_NAME,
+	        MODEL_PATH,
+	        MODEL_TYPES,
+	        ALGORITHM_TYPE,
+	        VALID_RATIO,
+	        DATA_TYPE,
+	        TARGET_VAL,
+	        MSE,
+	        RMSE,
+	        MAPE,
+	        OUTDATA_PATH,
+	        OUTDATA_NAME,
+	        DATETIME,
+	        MODEL_STATE,
+	        FEATURES,
+	        DOCKER_HOST,
+			DOCKER_PORT,
+			DOCKER_URL,
+			AL_PARAM1,
+			AL_PARAM2,
+			AL_PARAM3,
+			AL_PARAM4,
+			AL_PARAM5,
+			SEASON,
+			R2
+	    ) VALUES (
+	        #{modelId},
+	        #{modelViewName},
+	        #{modelOrgName},
+	        #{modelPath},
+	        #{modelTypes},
+	        #{algorithmType},
+	        #{validRatio},
+	        #{dataType},
+	        #{targetVal},
+	        #{mse},
+	        #{rmse},
+	        #{mape},
+	        #{trainDataPath},
+		    #{trainDataFile},
+		    TO_DATE(#{datetime}, 'yyyy-MM-dd HH24:MI:SS'),
+	        'A',
+	        #{features},
+		    #{dockerHost},
+		    #{dockerPort},
+		    #{dockerUrl},
+		    #{alParam1},
+		    #{alParam2},
+		    #{alParam3},
+		    #{alParam4},
+		    #{alParam5},
+		    #{season},
+		    #{r2}
+	    )
+	</insert>
+	
+	<update id="updateModelDetails" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE MODEL_DETAIL
+		SET
+			MODEL_STATE = 'S'
+		WHERE
+			MODEL_ID = #{modelId}
+	</update>
+	
+	<update id="updateTrainCnt" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE 
+			MODEL_VIEW
+		SET 
+			TRAIN_CNT = TRAIN_CNT + 1
+		WHERE
+			MODEL_ID = #{modelId}
+	</update>
+	
+	<update id="updateDetailActive" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE 
+			MODEL_VIEW
+		SET 
+			TRAIN_CNT = TRAIN_CNT + 1
+		WHERE
+			DETAIL_ID = #{detailId}
+	</update>
+	
+	
+</mapper>
+
+

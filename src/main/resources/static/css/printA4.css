@@ -1,0 +1,94 @@
+body {
+
+margin: 0;
+
+padding: 0;
+
+}
+
+* {
+-webkit-print-color-adjust:exact;
+}
+
+table {
+	font-size: 18.6667px;
+	font-family: 돋움;
+}
+
+.page {
+
+width: 21cm;
+
+min-height: 29.7cm;
+
+padding: 10px 10px 10px 15mm;
+
+float:left;
+
+background:#eee;
+
+margin: 0;
+  position: relative;
+
+}
+
+.subpage {
+
+border: 2px red solid;
+
+background:#fff;   
+
+height: 257mm;
+
+}
+
+
+@page {
+
+size: A4;
+
+margin: 0;
+
+}
+
+/** For screen preview **/
+@media screen {
+  body { background: #e0e0e0 }
+  .page {
+    background: white;
+    box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+    margin: 5mm;
+  }
+}
+
+@media print {
+
+html, body {
+
+width: 210mm;
+
+height: 297mm;
+
+}
+
+.page {
+
+margin: 0;
+
+border: initial;
+
+width: initial;
+
+min-height: initial;
+
+box-shadow: initial;
+
+background: initial;
+
+page-break-after: always;
+
+}
+
+
+
+}

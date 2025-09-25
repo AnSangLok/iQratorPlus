@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.StatisticsMapper">
+    
+    <select id="selectStatisticsModelInfo" resultType="kr.co.iQratorPlus.statistics.domain.StatisticsVO">
+		SELECT
+			mv.MODEL_ID,
+			mv.MODEL_VIEW_NAME,
+			mv.TRAIN_CNT,
+			mv.TRAIN_DATA_FILE,
+			1-md.MAPE AS ACCURACY
+		FROM
+			MODEL_VIEW mv
+		INNER JOIN
+			MODEL_DETAIL md
+		ON
+			mv.MODEL_ID = md.MODEL_ID
+		WHERE
+			md.MODEL_STATE = 'A'
+		AND 
+			md.MODEL_TYPES = 'regression'
+	</select>
+	
+	<select id="selectStatisticsModelDetail" parameterType="kr.co.iQratorPlus.statistics.domain.StatisticsDetailVO" resultType="kr.co.iQratorPlus.statistics.domain.StatisticsDetailVO">
+		SELECT
+			DETAIL_ID,
+			MODEL_ID,
+			MSE,
+			RMSE,
+			1-MAPE AS MAPE,
+			R2
+		FROM
+			MODEL_DETAIL
+		WHERE
+			MODEL_ID = #{modelId}
+		ORDER BY
+			DETAIL_ID
+	</select>
+</mapper>

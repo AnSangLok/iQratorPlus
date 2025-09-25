@@ -1,0 +1,97 @@
+
+body {
+
+margin: 0;
+
+padding: 0;
+
+}
+
+* {
+
+box-sizing: border-box;
+
+-moz-box-sizing: border-box;
+
+-webkit-print-color-adjust:exact;
+
+}
+
+.page {
+
+width: 148mm;
+
+min-height: 209mm;
+
+padding: 10px;
+
+float:left;
+
+background:#eee;
+
+  margin: 0;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+
+}
+
+.subpage {
+
+border: 2px red solid;
+
+background:#fff;   
+
+height: 257mm;
+
+}
+
+
+
+@page {
+
+size: A5;
+
+}
+
+/** For screen preview **/
+@media screen {
+  body { background: #e0e0e0 }
+  .page {
+    background: white;
+    box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+    margin: 5mm;
+  }
+}
+
+@media print {
+
+html, body {
+
+width: 148mm;
+
+height: 209cm;
+
+}
+
+.page {
+
+margin: 0;
+
+border: initial;
+
+width: initial;
+
+min-height: initial;
+
+box-shadow: initial;
+
+background: initial;
+
+page-break-after: always;
+
+}
+
+
+
+}

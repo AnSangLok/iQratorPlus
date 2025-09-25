@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.ModelMapper">
+	
+    <select id="selectModelWithName" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+    	SELECT 
+			MODEL_ID
+			,MODEL_VIEW_NAME
+			,TO_CHAR(FIRST_TRAIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS FIRST_TRAIN_DATE
+			,TRAIN_CNT
+			,TRAIN_DATA_PATH
+			,TRAIN_DATA_FILE
+			,MODEL_STATE
+		FROM
+			MODEL_VIEW 
+		WHERE
+			1=1
+		AND
+			MODEL_VIEW_NAME LIKE #{modelViewName}
+		ORDER BY
+			FIRST_TRAIN_DATE
+    </select>
+    
+    <select id="selectModelInfo" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT 
+			v.MODEL_ID
+			,v.MODEL_VIEW_NAME
+			,TO_CHAR(v.FIRST_TRAIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS FIRST_TRAIN_DATE
+			,v.TRAIN_CNT
+			,v.TRAIN_DATA_PATH
+			,v.TRAIN_DATA_FILE
+			,v.MODEL_STATE
+		FROM
+			MODEL_VIEW v
+		WHERE
+			1=1
+		ORDER BY
+			v.FIRST_TRAIN_DATE DESC
+	</select>
+	
+	<select id="selectModelDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT 
+			MODEL_ID,
+		    MODEL_VIEW_NAME,
+		    MODEL_TYPES,
+		    ALGORITHM_TYPE,
+		    VALID_RATIO,
+		    DATA_TYPE,
+		    TARGET_VAL,
+		    MAPE,
+		    R2,
+		    OUTDATA_NAME
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID = #{modelId}
+		AND
+			MODEL_STATE = 'A'
+	</select>
+	
+	<select id="selectWaitModelDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT 
+			MODEL_ID,
+		    MODEL_VIEW_NAME,
+		    MODEL_TYPES,
+		    ALGORITHM_TYPE,
+		    VALID_RATIO,
+		    DATA_TYPE,
+		    TARGET_VAL,
+		    MAPE,
+		    R2,
+		    OUTDATA_NAME
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID = #{modelId}
+		ORDER BY "DATETIME" DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	
+	<select id="selectModelHistory" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			DETAIL_ID,
+			MODEL_ID,
+		    MODEL_VIEW_NAME,
+		    MODEL_ORG_NAME,
+		    MODEL_STATE,
+		    TO_CHAR(DATETIME, 'YYYY-MM-DD HH24:MI:SS') AS DATETIME,
+		    MAPE,
+		    R2
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID = #{model_id}
+	</select>
+	
+	<select id="selectModelPost" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			MODEL_ID
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID=#{model_id}
+	</select>
+	
+	<select id="selectRequestInfo" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT
+			MODEL_ID
+			,MODEL_ORG_NAME
+			,TARGET_VAL
+			,FEATURES
+			,OUTDATA_PATH
+			,OUTDATA_NAME
+			,DOCKER_HOST
+			,DOCKER_PORT
+			,DOCKER_URL
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID=#{modelId}
+		AND 
+			MODEL_STATE = 'A'
+	</select>
+	
+	<select id="selectWaitRequestInfo" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT
+			MODEL_ID
+			,MODEL_ORG_NAME
+			,TARGET_VAL
+			,FEATURES
+			,OUTDATA_PATH
+			,OUTDATA_NAME
+			,DOCKER_HOST
+			,DOCKER_PORT
+			,DOCKER_URL
+		FROM
+			MODEL_DETAIL
+		WHERE
+			1=1
+		AND
+			MODEL_ID=#{modelId}
+		ORDER BY "DATETIME" DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<select id="selectLatestDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		SELECT
+			DETAIL_ID
+		FROM
+			MODEL_DETAIL
+		WHERE
+			MODEL_ID = #{modelId}
+		ORDER BY DATETIME DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<delete id="deleteModelHistory" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		DELETE FROM MODEL_DETAIL
+		WHERE DETAIL_ID = #{detailId}
+	</delete>
+	
+	<delete id="deleteModelOrg" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		DELETE FROM MODEL_VIEW
+		WHERE MODEL_ID = #{modelId}
+	</delete>
+	
+	<update id="startModelStates" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE MODEL_VIEW  
+		SET MODEL_STATE = 'R' 
+		WHERE MODEL_ID = #{modelId}
+	</update>
+	
+	<update id="stopModelStates" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE MODEL_VIEW  
+		SET MODEL_STATE = 'W' 
+		WHERE MODEL_ID = #{modelId}
+	</update>
+	
+	<update id="updateModelStates" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE MODEL_DETAIL  
+		SET MODEL_STATE = 'S' 
+		WHERE MODEL_ID = #{modelId}
+	</update>
+	
+	<update id="updateDetailState" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+		UPDATE MODEL_DETAIL  
+		SET MODEL_STATE = 'A' 
+		WHERE DETAIL_ID = #{detailId}
+	</update>
+	
+</mapper>

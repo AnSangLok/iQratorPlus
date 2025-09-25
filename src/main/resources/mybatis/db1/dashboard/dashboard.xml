@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.iQratorPlus.database.mapper.DashBoardMapper">
+
+	<!-- <resultMap id="DashBoardVOResultMap" type="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+	    <constructor>
+	        <arg column="TOTAL_COUNT" javaType="java.math.BigDecimal"/>
+	        <arg column="COUNT_OF_S" javaType="java.math.BigDecimal"/>
+	    </constructor>
+	</resultMap> -->
+    
+    <select id="selectModelCnt" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			COUNT(*) AS TOTAL_COUNT,
+		    COUNT(CASE WHEN MODEL_STATE = 'R' THEN 1 END) AS COUNT_OF_S
+		FROM
+			MODEL_VIEW
+	</select>
+	
+	<select id="selectModelInfo" parameterType="java.util.HashMap" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT 
+		    mv.MODEL_ID, 
+		    mv.MODEL_VIEW_NAME, 
+		    md.MODEL_STATE,
+		    md.OUTDATA_PATH,
+			md.OUTDATA_NAME
+		FROM 
+		    MODEL_VIEW mv
+		INNER JOIN 
+		    MODEL_DETAIL md
+		ON 
+		    mv.MODEL_ID = md.MODEL_ID
+		WHERE 
+			md.MODEL_STATE = 'A'
+	</select>
+	
+	<select id="selectLatestGraph" parameterType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT 
+		    mv.MODEL_ID, 
+		    mv.MODEL_VIEW_NAME, 
+		    md.MODEL_STATE,
+		    md.OUTDATA_PATH,
+			md.OUTDATA_NAME
+		FROM 
+		    MODEL_VIEW mv
+		INNER JOIN 
+		    MODEL_DETAIL md
+		ON 
+		    mv.MODEL_ID = md.MODEL_ID
+		WHERE 
+			md.MODEL_STATE = 'A'
+	</select>
+    
+    <select id="selectAlgorithmCnt" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT
+			ALGORITHM_TYPE,
+			COUNT(ALGORITHM_TYPE) AS ALGORITHM_CNT
+		FROM
+			MODEL_DETAIL
+		WHERE 
+			MODEL_STATE = 'A'
+		GROUP BY
+			ALGORITHM_TYPE
+	</select>
+	
+	<select id="selectCallApiCnt" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT
+			MODEL_VIEW_NAME,
+			CALL_API_CNT
+		FROM
+			MODEL_VIEW
+		WHERE
+			CALL_API_CNT > 0
+	</select>
+	
+	<select id="selectMaxTrain" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT 
+			MODEL_ID
+		FROM 
+			MODEL_VIEW
+		WHERE 
+			TRAIN_CNT = (SELECT MAX(TRAIN_CNT) FROM MODEL_VIEW)
+	</select>
+	
+	<select id="selectMaxTrainDetail" parameterType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT
+			DETAIL_ID,
+			MODEL_ID,
+			MSE,
+			RMSE,
+			1-MAPE AS MAPE
+		FROM
+			MODEL_DETAIL
+		WHERE
+			MODEL_ID = #{modelId}
+		ORDER BY
+			DETAIL_ID
+	</select>
+	
+	<select id="selectLatestClusterModel" parameterType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+		SELECT 
+			MODEL_ID,
+			FEATURES
+		FROM 
+			MODEL_DETAIL 
+		WHERE 
+			MODEL_TYPES = 'cluster'
+		ORDER BY DATETIME DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+</mapper>

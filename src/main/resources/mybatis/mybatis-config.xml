@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- <setting name="cacheEnabled" value="true"/> default value -->
+		<!-- <setting name="cacheEnabled" value="false"/> -->
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<!-- <setting name="multipleResultSetsEnabled" value="true"/> default value -->
+		<!-- <setting name="useColumnLabel" value="true"/> default value -->
+		<!-- <setting name="useGeneratedKeys" value="false"/> default value -->
+		<!-- <setting name="defaultExecutorType" value="SIMPLE"/> default value -->
+		<!-- 데이터베이스 응답 시간 타임아웃 -->
+		<setting name="defaultStatementTimeout" value="25000"/>
+		  <!-- A_Column > aColumn으로 자동 매핑 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="localCacheScope" value="STATEMENT"/>
+		<!-- 파라미터에 null이 있으면 에러 처리 -->
+		<setting name="jdbcTypeForNull" value="CHAR"/>
+		 <!-- 결과가 Map타입일 경우 Null인 컬럼값을 그대로 Null 처리 -->
+        <!-- <setting name="callSettersOnNulls" value="true"/> -->
+	</settings>
+	
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String"/>
+	</typeHandlers>
+</configuration>

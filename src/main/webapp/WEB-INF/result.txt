@@ -1,0 +1,19 @@
+model_id: md_0000045
+model_name: lof_20250212023140.pkl
+model_path: /home/ml-volume/models/20250212/
+model_type: cluster
+algorithm: lof
+ratio: 없음
+data_type: query
+target_column: 없음
+train_date: 2025-02-12 02:31:41
+train_data_path: /home/ml-volume/files/20250212/
+data_name: SELECT_IRS_MAN200_DATE_RESULT_WHERE_20250212023140.csv
+mse: 없음
+rmse: 없음
+mape: 없음
+train_score: 없음
+test_score: 없음
+features: TRTQ
+param1: n_neighbors@@20
+param2: contamination@@0.05
