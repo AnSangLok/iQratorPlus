@@ -8,30 +8,11 @@ import kr.co.iQratorPlus.util.TextEdit;
 
 public class SqlProvider {
 
-//    public String dynamicSql(String query, String rows) {
-//    	query = query + " FETCH FIRST @@ ROWS ONLY";
-//    	query = query.replaceAll("@@", rows);
-//        return new StringBuilder()
-//            .append(query)
-//            .toString();
-//    }
-	public String dynamicSql(String query, String rows) {
-        String trimmedQuery = query == null ? "" : query.trim();
-        if (trimmedQuery.endsWith(";")) {
-            trimmedQuery = trimmedQuery.substring(0, trimmedQuery.length() - 1);
-        }
-
-        if (trimmedQuery.isEmpty()) {
-            return trimmedQuery;
-        }
-
-        String rowLimit = (rows == null || rows.trim().isEmpty()) ? "0" : rows.trim();
-
+    public String dynamicSql(String query, String rows) {
+    	query = query + " FETCH FIRST @@ ROWS ONLY";
+    	query = query.replaceAll("@@", rows);
         return new StringBuilder()
-            .append("SELECT * FROM (")
-            .append(trimmedQuery)
-            .append(") WHERE ROWNUM <= ")
-            .append(rowLimit)
+            .append(query)
             .toString();
     }
 	
