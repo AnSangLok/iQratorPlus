@@ -62,27 +62,41 @@
 			MODEL_STATE = 'A'
 	</select>
 	
-	<select id="selectWaitModelDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
-		SELECT 
-			MODEL_ID,
-		    MODEL_VIEW_NAME,
-		    MODEL_TYPES,
-		    ALGORITHM_TYPE,
-		    VALID_RATIO,
-		    DATA_TYPE,
-		    TARGET_VAL,
-		    MAPE,
-		    R2,
-		    OUTDATA_NAME
-		FROM
-			MODEL_DETAIL
-		WHERE
-			1=1
-		AND
-			MODEL_ID = #{modelId}
-		ORDER BY "DATETIME" DESC
-		FETCH FIRST 1 ROWS ONLY
-	</select>
+        <select id="selectWaitModelDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+                SELECT
+                        MODEL_ID,
+                    MODEL_VIEW_NAME,
+                    MODEL_TYPES,
+                    ALGORITHM_TYPE,
+                    VALID_RATIO,
+                    DATA_TYPE,
+                    TARGET_VAL,
+                    MAPE,
+                    R2,
+                    OUTDATA_NAME
+                FROM (
+                        SELECT
+                                MODEL_ID,
+                                MODEL_VIEW_NAME,
+                                MODEL_TYPES,
+                                ALGORITHM_TYPE,
+                                VALID_RATIO,
+                                DATA_TYPE,
+                                TARGET_VAL,
+                                MAPE,
+                                R2,
+                                OUTDATA_NAME
+                        FROM
+                                MODEL_DETAIL
+                        WHERE
+                                1=1
+                        AND
+                                MODEL_ID = #{modelId}
+                        ORDER BY "DATETIME" DESC
+                )
+                WHERE
+                        <![CDATA[ROWNUM <= 1]]>
+        </select>
 	
 	
 	<select id="selectModelHistory" parameterType="java.util.HashMap" resultType="java.util.HashMap">
@@ -135,37 +149,55 @@
 			MODEL_STATE = 'A'
 	</select>
 	
-	<select id="selectWaitRequestInfo" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
-		SELECT
-			MODEL_ID
-			,MODEL_ORG_NAME
-			,TARGET_VAL
-			,FEATURES
-			,OUTDATA_PATH
-			,OUTDATA_NAME
-			,DOCKER_HOST
-			,DOCKER_PORT
-			,DOCKER_URL
-		FROM
-			MODEL_DETAIL
-		WHERE
-			1=1
-		AND
-			MODEL_ID=#{modelId}
-		ORDER BY "DATETIME" DESC
-		FETCH FIRST 1 ROWS ONLY
-	</select>
+        <select id="selectWaitRequestInfo" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
+                SELECT
+                        MODEL_ID
+                        ,MODEL_ORG_NAME
+                        ,TARGET_VAL
+                        ,FEATURES
+                        ,OUTDATA_PATH
+                        ,OUTDATA_NAME
+                        ,DOCKER_HOST
+                        ,DOCKER_PORT
+                        ,DOCKER_URL
+                FROM (
+                        SELECT
+                                MODEL_ID
+                                ,MODEL_ORG_NAME
+                                ,TARGET_VAL
+                                ,FEATURES
+                                ,OUTDATA_PATH
+                                ,OUTDATA_NAME
+                                ,DOCKER_HOST
+                                ,DOCKER_PORT
+                                ,DOCKER_URL
+                        FROM
+                                MODEL_DETAIL
+                        WHERE
+                                1=1
+                        AND
+                                MODEL_ID=#{modelId}
+                        ORDER BY "DATETIME" DESC
+                )
+                WHERE
+                        <![CDATA[ROWNUM <= 1]]>
+        </select>
 	
-	<select id="selectLatestDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
-		SELECT
-			DETAIL_ID
-		FROM
-			MODEL_DETAIL
-		WHERE
-			MODEL_ID = #{modelId}
-		ORDER BY DATETIME DESC
-		FETCH FIRST 1 ROWS ONLY
-	</select>
+        <select id="selectLatestDetail" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
+                SELECT
+                        DETAIL_ID
+                FROM (
+                        SELECT
+                                DETAIL_ID
+                        FROM
+                                MODEL_DETAIL
+                        WHERE
+                                MODEL_ID = #{modelId}
+                        ORDER BY DATETIME DESC
+                )
+                WHERE
+                        <![CDATA[ROWNUM <= 1]]>
+        </select>
 	
 	<delete id="deleteModelHistory" parameterType="kr.co.iQratorPlus.model.domain.ModelVO">
 		DELETE FROM MODEL_DETAIL

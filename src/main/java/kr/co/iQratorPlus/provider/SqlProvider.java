@@ -9,10 +9,18 @@ import kr.co.iQratorPlus.util.TextEdit;
 public class SqlProvider {
 
     public String dynamicSql(String query, String rows) {
-    	query = query + " FETCH FIRST @@ ROWS ONLY";
-    	query = query.replaceAll("@@", rows);
+        String limit = rows == null ? "" : rows.trim();
+        if (limit.isEmpty()) {
+            return new StringBuilder()
+                .append(query)
+                .toString();
+        }
+
         return new StringBuilder()
+            .append("SELECT * FROM (")
             .append(query)
+            .append(") WHERE ROWNUM <= ")
+            .append(limit)
             .toString();
     }
 	

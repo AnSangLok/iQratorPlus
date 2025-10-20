@@ -99,16 +99,22 @@
 			DETAIL_ID
 	</select>
 	
-	<select id="selectLatestClusterModel" parameterType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
-		SELECT 
-			MODEL_ID,
-			FEATURES
-		FROM 
-			MODEL_DETAIL 
-		WHERE 
-			MODEL_TYPES = 'cluster'
-		ORDER BY DATETIME DESC
-		FETCH FIRST 1 ROWS ONLY
-	</select>
+        <select id="selectLatestClusterModel" parameterType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO" resultType="kr.co.iQratorPlus.dashboard.domain.DashBoardVO">
+                SELECT
+                        MODEL_ID,
+                        FEATURES
+                FROM (
+                        SELECT
+                                MODEL_ID,
+                                FEATURES
+                        FROM
+                                MODEL_DETAIL
+                        WHERE
+                                MODEL_TYPES = 'cluster'
+                        ORDER BY DATETIME DESC
+                )
+                WHERE
+                        <![CDATA[ROWNUM <= 1]]>
+        </select>
 	
 </mapper>

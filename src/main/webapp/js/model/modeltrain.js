@@ -280,27 +280,32 @@ function sqlModal() {
 }
 
 function sqlClose(){
-	document.getElementById("sqlModal").style.display = "none";
+        document.getElementById("sqlModal").style.display = "none";
+}
+
+function applyRownumPagination(sqlText, offset, fetchLimit) {
+        const start = Number(offset) || 0;
+        const end = Number(fetchLimit) || 0;
+        return "SELECT * FROM (SELECT inner_query.*, ROWNUM rnum FROM (" + sqlText + ") inner_query WHERE ROWNUM <= " + end + ") WHERE rnum > " + start;
 }
 
 function trainQuery() {
-	let sqlText = document.getElementById("sqltext").value;
-	
-	if(sqlText.length<15){
-		alert("쿼리문을 입력해 주세요.");
+        let sqlText = document.getElementById("sqltext").value;
+
+        if(sqlText.length<15){
+                alert("쿼리문을 입력해 주세요.");
 	}else{
-		let offset = document.getElementById("offset").value || "0";
-		let tmpOffset = Number(offset); // 숫자로 변환
-		let fetch = document.getElementById("fetch").value || "1000";
-		let tmpFetch = Number(fetch); // 숫자로 변환
-		fetch = (tmpFetch - tmpOffset).toString();
-		if(tmpFetch>10000){
-		    let userConfirmed = window.confirm("데이터 건수가 1만건을 넘을 경우 일부 알고리즘에서 학습 및 예측에 긴 시간이 소요 될수 있습니다. 진행하시겠습니까?");
-		    if (!userConfirmed) {
-                return; 
+                let offset = document.getElementById("offset").value || "0";
+                let tmpOffset = Number(offset); // 숫자로 변환
+                let fetch = document.getElementById("fetch").value || "1000";
+                let tmpFetch = Number(fetch); // 숫자로 변환
+                if(tmpFetch>10000){
+                    let userConfirmed = window.confirm("데이터 건수가 1만건을 넘을 경우 일부 알고리즘에서 학습 및 예측에 긴 시간이 소요 될수 있습니다. 진행하시겠습니까?");
+                    if (!userConfirmed) {
+                return;
             }
-		}
-		sqlText = sqlText + " OFFSET " + offset + " ROWS FETCH FIRST " + fetch + " ROWS ONLY";
+                }
+                sqlText = applyRownumPagination(sqlText, tmpOffset, tmpFetch);
 		
 		Load.showLoader();
 		$.ajax({
@@ -810,15 +815,14 @@ function sendSelectedVariables() {
 	offset  = offset || "0"
 	let tmpOffset = Number(offset);
 	
-	let fetchElement = document.getElementById("fetch");
-	let fetch = fetchElement ? fetchElement.value : null;
-	fetch  = fetch || "1000"
-	let tmpFetch = Number(fetch);
-	fetch = (tmpFetch - tmpOffset).toString();
+        let fetchElement = document.getElementById("fetch");
+        let fetch = fetchElement ? fetchElement.value : null;
+        fetch  = fetch || "1000"
+        let tmpFetch = Number(fetch);
 
-	if(sqlText!=""&&sqlText!=null){
-		sqlText = sqlText + " OFFSET " + offset + " ROWS FETCH FIRST " + fetch + " ROWS ONLY";
-	}
+        if(sqlText!=""&&sqlText!=null){
+                sqlText = applyRownumPagination(sqlText, tmpOffset, tmpFetch);
+        }
 	
     // 체크된 항목들의 변수명을 배열로 수집
     const selectedVariables = [];
@@ -1010,13 +1014,11 @@ function sendSelectedFiltering() {
 	offset  = offset || "0"
 	let tmpOffset = Number(offset);
 	
-	let fetchElement = document.getElementById("fetch");
-	let fetch = fetchElement ? fetchElement.value : null;
-	fetch  = fetch || "1000"
-	let tmpFetch = Number(fetch);
-	fetch = (tmpFetch - tmpOffset).toString();
-	
-	sqlText = sqlText + " OFFSET " + offset + " ROWS FETCH FIRST " + fetch + " ROWS ONLY";
+        let fetchElement = document.getElementById("fetch");
+        let fetch = fetchElement ? fetchElement.value : null;
+        fetch  = fetch || "1000"
+        let tmpFetch = Number(fetch);
+        sqlText = applyRownumPagination(sqlText, tmpOffset, tmpFetch);
     const tooltip = document.getElementById('slider-tooltip');
 
 	// 텍스트 값 가져오기
