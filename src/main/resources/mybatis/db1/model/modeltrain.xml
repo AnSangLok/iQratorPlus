@@ -14,13 +14,18 @@
     </select>
     <!-- 신규 모델 생성시 id체크 -->
     <select id="latestModelId" resultType="java.lang.String">
-    	SELECT 
-    		MODEL_ID
-		FROM 
-			MODEL_VIEW
-		ORDER BY 
-			FIRST_TRAIN_DATE DESC
-		FETCH FIRST 1 ROW ONLY
+        SELECT
+                MODEL_ID
+        FROM (
+                SELECT
+                        MODEL_ID
+                FROM
+                        MODEL_VIEW
+                ORDER BY
+                        FIRST_TRAIN_DATE DESC
+        )
+                WHERE
+                        <![CDATA[ROWNUM <= 1]]>
     </select>
     
     <select id="selectViewAndDetailList" parameterType="kr.co.iQratorPlus.model.domain.ModelVO" resultType="kr.co.iQratorPlus.model.domain.ModelVO">
